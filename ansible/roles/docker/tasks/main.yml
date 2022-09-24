@@ -1,0 +1,40 @@
+---
+- name: Install Docker
+  when: ansible_facts['distribution'] == 'Ubuntu'
+  become: true
+  block:
+  - name: Add Docker GPG apt Key
+    apt_key:
+      url: https://download.docker.com/linux/ubuntu/gpg
+      state: present
+
+  - name: Add Docker Repository
+    apt_repository:
+      repo: "deb https://download.docker.com/linux/{{ ansible_facts['distribution'] | lower }} {{ ansible_lsb['codename'] }} stable"
+      state: present
+      
+  - name: Update apt and install docker-ce
+    apt:
+      name: docker-ce
+      state: latest
+      update_cache: true
+
+- name: Ensure group docker exists
+  group:
+    name: docker
+    state: present
+
+- name: Add user "{{ ansible_user }}" to group docker
+  user:
+    name: '{{ ansible_user }}'
+    groups:
+      - docker
+    append: yes
+
+- name: Install Docker module for Python
+  pip:
+    name: docker
+- name: Install Docker compose module for Python
+  pip:
+    name: docker-compose
+...

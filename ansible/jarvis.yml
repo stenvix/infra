@@ -1,0 +1,13 @@
+---
+- name: Jarvis
+  hosts: jarvis
+  roles:
+    - role: system
+    - role: docker
+    - role: containers/administration/portainer
+      tags:
+        - containers
+    - role: containers/apps/aquila
+      tags:
+        - containers
+...

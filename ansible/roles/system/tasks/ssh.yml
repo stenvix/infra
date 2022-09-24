@@ -1,0 +1,15 @@
+---
+- name: Generate ssh keys
+  community.crypto.openssh_keypair:
+    path: ~{{ ansible_user }}/.ssh/id_rsa
+    mode: 0600
+  register: deploy_key
+- name: Add deploy key to github
+  community.general.github_key:
+    pubkey : '{{ deploy_key.public_key }}'
+    name: "{{ ansible_hostname | replace('.', '-') }}"
+    token: "{{ github_token }}"
+    force: true
+- ansible.builtin.debug:
+      var: deploy_key
+...

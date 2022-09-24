@@ -1,0 +1,14 @@
+---
+- name: System update
+  become: true
+  apt:
+    upgrade: 'dist'
+    autoremove: yes
+    update_cache: yes
+
+- name: Installing the necessary packages
+  become: true
+  package:
+    name: "{{ common_packages }}"
+    state: present
+...

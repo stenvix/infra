@@ -1,0 +1,15 @@
+- name: Create portainer directory
+  file:
+    path: ~{{ ansible_user }}/portainer
+    state: directory
+
+- name: Copy portainer compose files
+  ansible.builtin.copy: 
+    src: ../docker/portainer-compose.yml
+    dest: ~{{ ansible_user }}/portainer/docker-compose.yml
+    owner: '{{ ansible_user }}'
+- name: Run portainer compose
+  community.docker.docker_compose:
+    project_src: ~{{ ansible_user }}/portainer
+    files: 
+      - docker-compose.yml

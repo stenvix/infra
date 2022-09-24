@@ -1,0 +1,25 @@
+- name: Pull aquila repo
+  ansible.builtin.git:
+    repo: git@github.com:stenvix/aquila.git
+    dest: "~{{ ansible_user }}/apps/aquila"
+    version: "improvements"
+
+- name: Generate postgres password 
+  ansible.builtin.set_fact:
+    postgres_password: "{{ lookup('ansible.builtin.password', '/tmp/postgres_password length=15 chars=ascii_letters') }}"
+
+- ansible.builtin.debug:
+      var: postgres_password
+
+- name: Generate env file
+  template:
+    src: env.j2
+    dest: "~{{ ansible_user }}/apps/aquila/.env.prod"
+
+- name: Run aquila compose
+  community.docker.docker_compose:
+    project_src: ~{{ ansible_user }}/apps/aquila
+    files: 
+      - docker-compose.prod.yml
+
+  

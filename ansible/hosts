@@ -1,0 +1,8 @@
+[jarvis]
+jarvis.local
+
+[cube]
+cube.local
+
+[all:vars]
+ansible_user=vstepanov
