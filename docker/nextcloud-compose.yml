@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  nextcloud:
+    image: nextcloud:latest
+    container_name: nextcloud-app
+    restart: always
+    networks:
+     - nextcloud_network
+
+  nextcloud-db:
+    image: postgres:latest
+    container_name: nextcloud-db
+    restart: always
+    networks:
+     - nextcloud_network
+
+networks:
+  nextcloud_network:
+  
