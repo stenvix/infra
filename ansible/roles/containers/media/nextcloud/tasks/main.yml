@@ -1,0 +1,16 @@
+- name: Create nextcloud directory
+  file:
+    path: ~{{ ansible_user }}/nextcloud
+    state: directory
+
+- name: Copy portainer compose files
+  ansible.builtin.copy: 
+    src: ../docker/nextcloud-compose.yml
+    dest: ~{{ ansible_user }}/nextcloud/docker-compose.yml
+    owner: '{{ ansible_user }}'
+
+- name: Run portainer compose
+  community.docker.docker_compose:
+    project_src: ~{{ ansible_user }}/nextcloud
+    files: 
+      - docker-compose.yml

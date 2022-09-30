@@ -5,21 +5,29 @@ services:
     container_name: traefik
     restart: always
     command:
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
       - "--api.insecure=true"
       - "--providers.docker=true"
       - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"
     ports:
       - "80:80"
       - "8080:8080"
+      - "443:443"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    labels:
+      - "traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)"
+      - "traefik.http.routers.http-catchall.entrypoints=web"
+      - "traefik.http.routers.http-catchall.middlewares=redirect-to-https"
+      - "traefik.http.middlewares.redirect-to-https.redirectscheme.scheme=https"
   whoami:
     image: "traefik/whoami"
     container_name: "simple-service"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.whoami.rule=Host(`jarvis-1.local`)"
+      - "traefik.http.routers.whoami.rule=Host(`jarvis.local/whoami`)"
       - "traefik.http.routers.whoami.entrypoints=web"
 
 networks:

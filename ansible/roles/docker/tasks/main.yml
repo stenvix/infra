@@ -20,11 +20,13 @@
       update_cache: true
 
 - name: Ensure group docker exists
+  become: true
   group:
     name: docker
     state: present
 
 - name: Add user "{{ ansible_user }}" to group docker
+  become: true
   user:
     name: '{{ ansible_user }}'
     groups:

@@ -1,0 +1,8 @@
+- name: Jarvis
+  hosts: cube
+  roles:
+  - role: system
+  - role: docker
+  - role: containers/administration/portainer-agent
+    tags:
+      - containers
