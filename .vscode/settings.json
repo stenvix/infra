@@ -1,0 +1,6 @@
+{
+    "yaml.schemas": {
+        "https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json": "file:///d%3A/Projects/infra/docker/portainer-compose.yml",
+        "https://raw.githubusercontent.com/ansible-community/schemas/main/f/ansible.json#/$defs/playbook": "file:///d%3A/Projects/infra/ansible/jarvis.yml"
+    }
+}

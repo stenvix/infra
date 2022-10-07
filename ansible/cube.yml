@@ -6,3 +6,6 @@
   - role: containers/administration/portainer-agent
     tags:
       - containers
+  - role: containers/media/nextcloud
+    tags:
+      - containers

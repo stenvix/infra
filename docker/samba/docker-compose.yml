@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  samba:
+    image: servercontainers/samba
+    container_name: samba
+    restart: always
+    network_mode: host
+    environment:
+      ACCOUNT_share: share
+      SAMBA_VOLUME_CONFIG_ssd: "[SSD]; path=/media/ssd; valid users = share; guest ok = no; read only = no; browseable = yes"
+    volumes:
+      - /mnt/ssd/:/media/ssd
