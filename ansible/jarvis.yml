@@ -4,7 +4,13 @@
   roles:
     - role: system
     - role: docker
-    - role: containers/administration/portainer
+    - role: containers/portainer/server
+      tags:
+        - containers
+    - role: containers/traefik
+      tags:
+        - containers
+    - role: containers/consul/server
       tags:
         - containers
     - role: containers/apps/aquila

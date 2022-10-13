@@ -13,6 +13,8 @@ services:
       - "--certificatesresolvers.le.acme.tlschallenge=true"
       - "--certificatesresolvers.le.acme.email=falken.ua@gmail.com"
       - "--certificatesresolvers.le.acme.storage=/letsencrypt/acme.json"
+      - "--providers.consulcatalog=true"
+      - "--providers.consulcatalog.endpoint.address=consul:8500"
     ports:
       - "80:80"
       - "8080:8080"
@@ -20,6 +22,9 @@ services:
     volumes:
       - "./letsencrypt:/letsencrypt"
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+    networks:
+      - default
+      - consul
     # labels:
     #   - "traefik.http.routers.http-catchall.rule=hostregexp(`{host:.+}`)"
     #   - "traefik.http.routers.http-catchall.entrypoints=web"
@@ -35,4 +40,6 @@ services:
 
 networks:
   default:
-      name: traefik
+    name: traefik
+  consul:
+    external: true

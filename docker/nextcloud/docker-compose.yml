@@ -12,24 +12,23 @@ services:
       - nextcloud:/var/www/html
       - /mnt/ssd:/media/ssd
       - /mnt/hdd:/media/hdd
-    networks:
-     - nextcloud_network
     environment:
-     POSTGRES_HOST: ${POSTGRES_HOST}
-     POSTGRES_DB: ${POSTGRES_DB}
-     POSTGRES_USER: ${POSTGRES_USER}
-     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-     REDIS_HOST: nextcloud-redis
-     PHP_UPLOAD_LIMIT: 4G
-     PHP_MEMORY_LIMIT: 5G
-     
+      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      REDIS_HOST: nextcloud-redis
+      PHP_UPLOAD_LIMIT: 4G
+      PHP_MEMORY_LIMIT: 5G
+    networks:
+      - consul
+      - default
+
   nextcloud-redis:
     image: redis:alpine
     container_name: nextcloud-redis
     restart: always
-    networks:
-     - nextcloud_network
-     
+
   nextcloud-nginx:
     build: ./nginx
     container_name: nextcloud-nginx
@@ -39,9 +38,13 @@ services:
     volumes:
       - nextcloud:/var/www/html
     depends_on:
-     - nextcloud
+      - nextcloud
+    environment:
+      - SERVICE_NAME=nextcloud
+      - SERVICE_TAGS=traefik.http.routers.nextcloud.rule=Host(`cloud.stepanov.page`),traefik.http.routers.nextcloud.entrypoints=websecure,traefik.http.routers.nextcloud.tls.certresolver=le,traefik.http.routers.nextcloud.tls=true,traefik.http.services.aquila-secure.loadbalancer.server.port=8080
     networks:
-     - nextcloud_network
+      - consul
+      - default
 
   nextcloud-db:
     image: postgres:latest
@@ -49,17 +52,17 @@ services:
     restart: always
     volumes:
       - nextcloud-db:/var/lib/postgresql/data
-    networks:
-     - nextcloud_network
     environment:
-     POSTGRES_DB: ${POSTGRES_DB}
-     POSTGRES_USER: ${POSTGRES_USER}
-     POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-     
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
 volumes:
   nextcloud-db:
   nextcloud:
 
 networks:
-  nextcloud_network:
-  
+  default:
+    name: nextcloud
+  consul:
+    external: true

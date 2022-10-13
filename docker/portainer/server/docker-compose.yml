@@ -12,7 +12,6 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
     networks:
-       - portainer_network
        - traefik
     labels:
       - "traefik.enable=true"
@@ -24,12 +23,9 @@ services:
       - "traefik.http.routers.portainer.entrypoints=web"
       - "traefik.docker.network=traefik"
 
-
 volumes:
   portainer_data:
 
 networks:
   traefik:
-    external:
-      name: traefik
-  portainer_network:
+    external: true

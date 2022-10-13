@@ -6,6 +6,7 @@ services:
     restart: always
     network_mode: host
     environment:
+      UID_share: {{uid}}
       ACCOUNT_share: share
       SAMBA_VOLUME_CONFIG_ssd: "[SSD]; path=/media/ssd; valid users = share; guest ok = no; read only = no; browseable = yes"
     volumes:

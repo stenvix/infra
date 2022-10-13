@@ -19,6 +19,7 @@
 - name: Run aquila compose
   community.docker.docker_compose:
     project_src: ~{{ ansible_user }}/apps/aquila
+    build: true
     files: 
       - docker-compose.prod.yml
 

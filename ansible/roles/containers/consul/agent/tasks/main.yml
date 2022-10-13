@@ -1,0 +1,16 @@
+- name: Copy {{ container_name }} compose files
+  ansible.builtin.copy: 
+    src: ../docker/{{ container_name }}/{{ compose_name }}/
+    dest: ~{{ ansible_user }}/{{ container_name }}
+    owner: '{{ ansible_user }}'
+
+- name: Generate {{ container_name }} config file
+  template:
+    src: client.j2
+    dest: "~{{ ansible_user }}/{{ container_name }}/client.json"
+
+- name: Run {{ container_name }} compose
+  community.docker.docker_compose:
+    project_src: ~{{ ansible_user }}/{{ container_name }}
+    files: 
+      - docker-compose.yml

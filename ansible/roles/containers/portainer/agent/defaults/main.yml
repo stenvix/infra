@@ -1,0 +1,2 @@
+container_name: portainer
+container_path: "{{container_name}}/agent"

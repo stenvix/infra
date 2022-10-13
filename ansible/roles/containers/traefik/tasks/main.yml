@@ -1,0 +1,10 @@
+- name: Copy {{ container_name }} compose files
+  ansible.builtin.copy: 
+    src: ../docker/{{ container_name }}/
+    dest: ~{{ ansible_user }}/{{ container_name }}
+    owner: '{{ ansible_user }}'
+- name: Run {{ container_name }} compose
+  community.docker.docker_compose:
+    project_src: ~{{ ansible_user }}/{{ container_name }}
+    files: 
+      - docker-compose.yml

@@ -5,4 +5,9 @@ common_packages:
   - apt-transport-https
   - python3
   - python3-pip
+
+uid: 1000
+gid: 1000
+
+hostnames: {'jarvis': 'jarvis.local', 'cube': 'cube.local'}
 ...

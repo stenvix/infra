@@ -1,11 +1,21 @@
-- name: Jarvis
+- name: Cube
   hosts: cube
   roles:
   - role: system
   - role: docker
-  - role: containers/administration/portainer-agent
+  - role: containers/portainer/agent
     tags:
       - containers
-  - role: containers/media/nextcloud
+  - role: containers/consul/agent
     tags:
       - containers
+  - role: containers/nextcloud
+    tags:
+      - containers
+  - name: Install samba
+    role: docker/install
+    container_name: samba
+    compose_path: samba
+    tags:
+      - containers
+      - samba
