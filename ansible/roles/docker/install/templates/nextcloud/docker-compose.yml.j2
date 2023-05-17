@@ -1,0 +1,62 @@
+version: '3.8'
+services:
+  nextcloud:
+    image: linuxserver/nextcloud:latest
+    container_name: nextcloud
+    restart: always
+    ports:
+      - 443:443
+    depends_on:
+      - nextcloud-db
+      - nextcloud-redis
+    volumes:
+      - nextcloud:/config
+      - nextcloud:/data
+      - /mnt/ssd:/media/ssd
+      - /mnt/hdd:/media/hdd
+    environment:
+      PUID: {{uid}}
+      PGID: {{gid}}
+      REDIS_HOST: nextcloud-redis
+      PHP_UPLOAD_LIMIT: 4G
+      PHP_MEMORY_LIMIT: 5G
+      SERVICE_NAME: nextcloud
+      SERVICE_TAGS: traefik.http.routers.nextcloud.rule=Host(`cloud.stepanov.page`),traefik.http.routers.nextcloud.entrypoints=websecure,traefik.http.routers.nextcloud.tls.certresolver=le,traefik.http.routers.nextcloud.tls=true,traefik.http.services.nextcloud.loadbalancer.server.scheme=https
+      POSTGRES_HOST: nextcloud-db
+{% if nextcloud.environment is defined %}
+  {% for key,value in nextcloud.environment.items() %}
+    {{key}}: {{value}}
+  {% endfor %}
+{% endif %}
+    
+    networks:
+      - consul
+      - default
+
+  nextcloud-redis:
+    image: redis:alpine
+    container_name: nextcloud-redis
+    restart: always
+
+  nextcloud-db:
+    image: postgres:14
+    container_name: nextcloud-db
+    restart: always
+    volumes:
+      - nextcloud-db:/var/lib/postgresql/data
+    environment:
+{% if nextcloud.environment is defined %}
+  {% for key,value in nextcloud.environment.items() %}
+    {{key}}: {{value}}
+  {% endfor %}
+{% endif %}
+
+volumes:
+  nextcloud-db:
+  nextcloud:
+
+networks:
+  default:
+    name: nextcloud
+  consul:
+    external: true

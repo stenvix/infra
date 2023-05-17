@@ -1,0 +1,27 @@
+---
+samba:
+  mounts:
+    storage:
+      system_path: "/mnt/storage"
+      docker_path: "/media/storage"
+      config: "[STORAGE]; path=/media/storage; valid users = share; guest ok = no; read only = no; browseable = yes"
+photoprism:
+  labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.photoprism.rule=Host(`prism.jarvis.local`)"
+      - "traefik.http.routers.photoprism.entrypoints=web"
+      - "traefik.docker.network=traefik"
+  mounts:
+    originals:
+      system_path: "/mnt/storage/media/originals"
+      docker_path: "/photoprism/originals"
+    storage:
+      system_path: "/mnt/storage/media/cache"
+      docker_path: "/photoprism/storage"
+    import:
+      system_path: "/mnt/storage/media/import"
+      docker_path: "/photoprism/import"
+  db:
+    system_path: "/mnt/storage/media/db"
+    docker_path: "/var/lib/mysql"
+...

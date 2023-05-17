@@ -15,6 +15,7 @@ services:
       - "--certificatesresolvers.le.acme.storage=/letsencrypt/acme.json"
       - "--providers.consulcatalog=true"
       - "--providers.consulcatalog.endpoint.address=consul:8500"
+      - "--serversTransport.insecureSkipVerify=true"
     ports:
       - "80:80"
       - "8080:8080"

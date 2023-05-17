@@ -1,21 +1,32 @@
 - name: Cube
   hosts: cube
   roles:
-  - role: system
-  - role: docker
-  - role: containers/portainer/agent
-    tags:
-      - containers
-  - role: containers/consul/agent
-    tags:
-      - containers
-  - role: containers/nextcloud
-    tags:
-      - containers
-  - name: Install samba
-    role: docker/install
-    container_name: samba
-    compose_path: samba
-    tags:
-      - containers
-      - samba
+    - role: system
+    - role: docker
+    - role: containers/portainer/agent
+      tags:
+        - containers
+    - role: containers/consul/agent
+      tags:
+        - containers
+    - name: Install nextcloud
+      role: docker/install
+      container_name: nextcloud
+      compose_path: nextcloud
+      tags:
+        - containers
+        - nextcloud
+    - name: Install samba
+      role: docker/install
+      container_name: samba
+      compose_path: samba
+      tags:
+        - containers
+        - samba
+    - name: Install photoprism
+      role: docker/install
+      container_name: photoprism
+      compose_path: photoprism
+      tags:
+        - containers
+        - photoprism

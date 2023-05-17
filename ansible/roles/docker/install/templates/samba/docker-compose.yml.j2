@@ -8,6 +8,12 @@ services:
     environment:
       UID_share: {{uid}}
       ACCOUNT_share: share
-      SAMBA_VOLUME_CONFIG_ssd: "[SSD]; path=/media/ssd; valid users = share; guest ok = no; read only = no; browseable = yes"
+      SAMBA_GLOBAL_CONFIG_server_SPACE_min_SPACE_protocol: NT1
+      SAMBA_GLOBAL_CONFIG_ntlm_SPACE_auth: ntlmv1-permitted
+{% for key,value in samba.mounts.items() %}
+      SAMBA_VOLUME_CONFIG_{{key}}: "{{value.config}}"  
+{% endfor %}
     volumes:
-      - /mnt/ssd/:/media/ssd
+{% for key,value in samba.mounts.items() %}
+      - {{value.system_path}}:{{value.docker_path}}
+{% endfor %}

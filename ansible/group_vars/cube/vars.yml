@@ -1,0 +1,29 @@
+---    
+samba:
+  mounts:
+    ssd:
+      system_path: "/mnt/ssd"
+      docker_path: "/media/ssd"
+      config: "[SSD]; path=/media/ssd; valid users = share; guest ok = no; read only = no; browseable = yes"
+    hdd:
+      system_path: "/mnt/hdd"
+      docker_path: "/media/hdd"
+      config: "[HDD]; path=/media/hdd; valid users = share; guest ok = no; read only = no; browseable = yes"
+photoprism:
+  mounts:
+    ssd:
+      system_path: "/mnt/ssd/media"
+      docker_path: "/photoprism/originals"
+    hdd:
+      system_path: "/mnt/hdd/"
+      docker_path: "/photoprism/originals/HDD/:ro"
+    storage:
+      system_path: "/mnt/ssd/media/cache"
+      docker_path: "/photoprism/storage"
+    import:
+      system_path: "/mnt/ssd/media/import"
+      docker_path: "/photoprism/import"
+  db:
+    system_path: "/mnt/ssd/media/db"
+    docker_path: "/var/lib/mysql"
+...
